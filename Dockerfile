@@ -1,19 +1,16 @@
 #Grab the latest alpine image
-FROM alpine:latest
+FROM python:3.10.5-slim-bullseye
 
 # Install python and pip
-RUN apk add --no-cache --update python3 py3-pip bash
-ADD ./webapp/requirements.txt /tmp/requirements.txt
+
+COPY ./requirements.txt .
 
 # Install dependencies
-RUN pip3 install --no-cache-dir -q -r /tmp/requirements.txt
+RUN pip3 install --no-cache-dir -q -r requirements.txt
 
 # Add our code
-ADD ./webapp /opt/webapp/
-WORKDIR /opt/webapp
-
-# Expose is NOT supported by Heroku
-# EXPOSE 5000 		
+COPY ./app /app
+WORKDIR /app
 
 # Run the image as a non-root user
 RUN adduser -D myuser
